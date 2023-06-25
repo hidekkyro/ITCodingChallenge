@@ -25,7 +25,8 @@ Input: [[1,2,2,1],
 Output: 2
 ```
 - Explicação:
-IMG
+  
+![](https://github.com/hidekkyro/ITCodingChallenge/blob/main/parede.jpg?raw=true)
 - Notas:
   - A soma dos comprimentos dos tijolos em cada array interno é sempre a mesma e não excederá MAX_INT.
   - O número de tijolos em cada linha está em um range de [1,10.000]. A altura da parede está em um range de [1, 10.000]. O número total de tijolos não excederá 20.000.
