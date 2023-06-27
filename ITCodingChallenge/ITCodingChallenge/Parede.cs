@@ -109,7 +109,7 @@ namespace ITCodingChallenge
         {
             Dictionary<int, int> contaTamnhoArestaTijolos = new Dictionary<int, int>();
 
-            
+            // O(n^2)
             for (int linha = 0; linha < parede.Length; linha++) // O(n)
             {
                 int posicao = 0;
@@ -117,7 +117,7 @@ namespace ITCodingChallenge
                 {
                     posicao += parede[linha][tijolo];
 
-                    if (contaTamnhoArestaTijolos.ContainsKey(posicao))
+                    if (contaTamnhoArestaTijolos.ContainsKey(posicao)) // O(1)
                     {
                         contaTamnhoArestaTijolos[posicao]++;  //adiciona qual posição passou novamente
                     }
