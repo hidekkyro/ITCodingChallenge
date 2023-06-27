@@ -14,7 +14,7 @@ namespace ParedeAPI.Controllers
         /// <param name="usarParedeExemplo">Usar a parede do enunciado.</param>
         /// <returns>retornará o mínimo número de tijolos, e se usado a parede exemplo, retornará a também.</returns>
         [HttpPost]
-        public IActionResult Cortar(int[][]? parede, bool usarParedeExemplo)
+        public IActionResult Cortar(int[][]? parede, bool usarParedeExemplo = false)
         {
             ParedeService paredeService = new ParedeService();
             if (usarParedeExemplo)
@@ -24,9 +24,12 @@ namespace ParedeAPI.Controllers
                     return BadRequest("Parede fora do padrão, preenche uma parede de uma altura de 1 até 10.000, e uma largura de 1 até 10.000, que contenha no maximo 20.000 tijolos.");
 
             int menorCorte = paredeService.MenorNumTijolosCortados(parede);
+            int menor2corte = paredeService.ContaParede(parede);
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("MenorCorte", menorCorte);
+            result.Add("Menor2Corte", menor2corte);
+
             if(usarParedeExemplo)
                 result.Add("ParedeExemplo", parede);
 
