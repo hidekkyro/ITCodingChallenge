@@ -2,14 +2,9 @@
 
 namespace ITCodingChallenge
 {
-    
+
     public class Parede
     {
-        #region Atributo privados
-
-        public int[][] parede { get; private set; }
-
-        #endregion Atributo privados
 
         #region contrutor
 
@@ -17,17 +12,12 @@ namespace ITCodingChallenge
         {
         }
 
-        public Parede(int linhas, int colunas)
-        {
-            GerarParedeRandom(linhas, colunas);
-        }
-
         #endregion contrutor
 
 
         #region Metodos
 
-        public string Status()
+        public string Status(int[][] parede)
         {
             string printParede = "[";
             for (int i = 0; i < parede.Length; i++)
@@ -46,140 +36,110 @@ namespace ITCodingChallenge
             return printParede;
         }
 
-        public void GerarParedeRandom(int linhas = 1, int colunas = 10000)
+        public int[][] GerarParedeExemplo()
         {
-            Random raw = new Random();
-            parede = new int[raw.Next(1, 10000)][];
-         }
-
-        public void GerarParedeExemplo()
-        {
-            parede = new int[6][];
+            int[][] parede = new int[6][];
             parede[0] = new int[] { 1, 2, 2, 1 };
             parede[1] = new int[] { 3, 1, 2 };
             parede[2] = new int[] { 1, 3, 2 };
             parede[3] = new int[] { 2, 4 };
             parede[4] = new int[] { 3, 1, 2 };
             parede[5] = new int[] { 1, 3, 1, 1 };
+
+            return parede;
         }
 
-
-        #region Calculando
-        //[Benchmark(Description = "QtdLargura")]
-        public int QtdLargura(int[] wall)
+        #region 
+        /*
+         * Altura da parede tem até 10.000 (linhas)
+         */
+        public int[][] GerarParedeAltura(int maxLinhas = 10000)
         {
-            int qtd = 0;
+            Random random = new Random();
+            return new int[random.Next(1, maxLinhas)][];
+        }
 
-            #region O(N)
-            for (int coluna = 0; coluna < wall.Length; coluna++)
+        /*
+         * o tamanho dos blocos podem ser de até max_int = 2.147.483.647
+         * pode contem 20.000 tijolos
+         * o tamanho total dos tijolos, são sempre os mesmos
+         * exemplo, parede tem uma largura de 2 e uma altura de 2, podedo gerar um tijolo de 2.147.483.646 e o outro de 1
+         * [ [2.147.483.646, 1],
+         *   [1, 2.147.483.646] ]
+        */
+        public void CriarTijolo(int[][] parede, int tamanhoMin = 1, int tamanhoMax = int.MaxValue)
+        {
+            Random random = new Random();
+            int qtdTijoloPorLinha = random.Next(1, 20000) / parede.Length;
+            int totalComprimentoTj = random.Next(tamanhoMin, tamanhoMax);
+
+            //for(int linha = 0; linha < parede.Length; linha++)
+            //{
+
+            //}
+
+        }
+
+        public bool ValidaParede(int[][] parede)
+        {
+
+            if (parede.Length > 10000)
+                return false;
+
+            for (int linha = 0; linha < parede.Length; linha++)
             {
-                qtd += wall[coluna];
+                if (parede[linha].Length > 10000)
+                    return false;
+
             }
-            #endregion O(N)
 
-            return qtd;
+            return true;
         }
 
-        //[Benchmark(Description = "ContaNumeroTijoloPorPosicao")]
-        public Dictionary<int, int> ContaNumeroTijoloPorPosicao()
+        /*
+         * contar quantas vezes eu fui até certo ponto e quantificar, 
+         * no exemplo do enunciado, contando os tijolos, quantidas vezes eu cheguei até a certa posição
+         * 1-1+1+1
+         * 3-1+1+1
+         * 5-1+1
+         * 4-1+1+1+1
+         * 2-1
+         */
+        public int MenorNumTijolosCortados(int[][] parede)
         {
-            int soma = 0;
-            int alvo = QtdLargura(parede[0]);  //O(N)
-            int totalBlocks = 0;
-            Dictionary<int,int> total = new Dictionary<int,int>();
+            Dictionary<int, int> contaTamnhoArestaTijolos = new Dictionary<int, int>();
 
-            #region O(N^3)
-            for (int posicao = 1; posicao < alvo; posicao++) //O(N)
+            
+            for (int linha = 0; linha < parede.Length; linha++) // O(n)
             {
-                totalBlocks = 0;
-                for (int linha = 0; linha < parede.Length; linha++) //O(N)
+                int posicao = 0;
+                for (int tijolo = 0; tijolo < parede[linha].Length - 1; tijolo++)  // O(n)
                 {
-                    for (int coluna = 0; coluna < parede[linha].Length; coluna++) //O(N)
+                    posicao += parede[linha][tijolo];
+
+                    if (contaTamnhoArestaTijolos.ContainsKey(posicao))
                     {
-                        int valor = parede[linha][coluna];
-                        soma += valor;
-                        if (posicao == soma)
-                        {
-                            break;
-                        }
-                        else if (posicao < soma)
-                        {
-                            totalBlocks++;
-                            break;
-                        }
+                        contaTamnhoArestaTijolos[posicao]++;  //adiciona qual posição passou novamente
                     }
-                    soma = 0;
-                }                
-                total.Add(posicao, totalBlocks);
-                
-            }
-            #endregion O(N^3)
-
-            return total;
-        }
-
-        //[Benchmark(Description = "MenorQtdTijoloCortado")]
-        public int MenorQtdTijoloCortado() 
-        {
-
-            Dictionary<int, int> cortes = ContaNumeroTijoloPorPosicao();
-
-            return cortes.Values.Min(); //O(N)
-
-        }
-
-        #endregion Calculando
-
-
-
-        #region final
-        [Benchmark(Description = "ContaParede")]
-        public int ContaParede(int[][] wall)
-        {
-            int soma = 0;
-            int alvo = 0;  
-            int totalBlocks;
-            int result;
-            Dictionary<int, int> total = new Dictionary<int, int>();
-
-            for (int coluna = 0; coluna < parede[1].Length; coluna++) // O(N)
-            {
-                alvo += parede[1][coluna];
-            }
-
-            #region O(N^3)
-            for (int posicao = 1; posicao < alvo; posicao++) // O(N)
-            {
-                totalBlocks = 0;
-                for (int linha = 0; linha < wall.Length; linha++) // O(N)
-                {
-                    for (int coluna = 0; coluna < wall[linha].Length; coluna++) // O(N)
+                    else
                     {
-                        int valor = wall[linha][coluna];
-                        soma += valor;
-                        if (posicao == soma)
-                        {
-                            break;
-                        }
-                        else if (posicao < soma)
-                        {
-                            totalBlocks++;
-                            break;
-                        }
+                        /*cria o tamanho do tijolo, 
+                         * exemplo: passando 1x no tijolo, cria o tamanho de tijolo 1, 
+                         * passando no tamanho 1+2=3 do tijolo, cria o tamanho 3 tijolo, 
+                         * que é a posição. 
+                         */
+                        contaTamnhoArestaTijolos[posicao] = 1;
                     }
-                    soma = 0;
                 }
-                total.Add(posicao, totalBlocks);
-
             }
-            #endregion O(N^3)
 
-            result = total.Values.Min();
+            int menor = parede.GetLength(0) - contaTamnhoArestaTijolos.Values.Max(); // O(n)
 
-            return result;
+            return menor;
         }
 
-        #endregion final
+
+        #endregion
 
         #endregion Metodos
     }
