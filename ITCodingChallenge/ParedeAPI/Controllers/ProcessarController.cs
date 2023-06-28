@@ -66,6 +66,12 @@ namespace ParedeAPI.Controllers
             timer.Restart();
             int menorCorteExemplo = _paredeService.ContaParede(paredeExemplo);
             TimeSpan tempoParedeExemplo = timer.Elapsed;
+            timer.Restart();
+            int menorCorteExemplo2 = _paredeService.MenorNumTijolosCortados(paredeGrande);
+            TimeSpan tempoParedeExemplo2 = timer.Elapsed;
+            timer.Restart();
+            int menorCorteExemplo3 = _paredeService.MenorNumTijolosCortados(paredeExemplo);
+            TimeSpan tempoParedeExemplo3 = timer.Elapsed;
             timer.Stop();
 
             int qtd = 0;
@@ -77,7 +83,6 @@ namespace ParedeAPI.Controllers
             var paredeGrand = new
             {
                 Altura = paredeGrande.GetLength(0),
-                Largura = paredeGrande[0].Length,
                 QtdTijolo = qtd
             };
 
@@ -90,7 +95,6 @@ namespace ParedeAPI.Controllers
             var paredeExempl = new
             {
                 Altura = paredeExemplo.GetLength(0),
-                Largura = paredeExemplo[0].Length,
                 QtdTijolo = qtd
             };
 
@@ -102,6 +106,14 @@ namespace ParedeAPI.Controllers
             result.Add("menorCorteExemplo", menorCorteExemplo);
             result.Add("tempoParedeExemplo", tempoParedeExemplo);
             result.Add("paredeExempl", paredeExempl);
+
+            result.Add("menorCorteExemplo2", menorCorteExemplo2);
+            result.Add("tempoParedeExemplo2", tempoParedeExemplo2);
+            result.Add("paredeExempl2", paredeGrand);
+
+            result.Add("menorCorteExemplo3", menorCorteExemplo3);
+            result.Add("tempoParedeExemplo3", tempoParedeExemplo3);
+            result.Add("paredeExempl3", paredeExempl);
 
             //if(usarParedeExemplo)
             //    result.Add("ParedeExemplo", parede);

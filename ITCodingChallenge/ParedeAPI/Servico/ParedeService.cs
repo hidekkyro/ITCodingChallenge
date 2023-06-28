@@ -21,16 +21,16 @@ namespace ParedeAPI.Servico
         public int[][] GerarParedeMassaGrande()
         {
             Dictionary<int, int[]> randomarray = new Dictionary<int, int[]>();
-            randomarray.Add(1, new int[] { 1, 2, 2, 1 });
-            randomarray.Add(2, new int[] { 3, 1, 2 });
-            randomarray.Add(3, new int[] { 1, 3, 2 });
-            randomarray.Add(4, new int[] { 2, 4 });
-            randomarray.Add(5, new int[] { 3, 1, 2 });
-            randomarray.Add(6, new int[] { 1, 3, 1, 1 });
-            randomarray.Add(7, new int[] { 1, 1, 3, 1 });
-            randomarray.Add(8, new int[] { 2, 2, 2 });
-            randomarray.Add(9, new int[] { 1, 2, 3 });
-            randomarray.Add(10, new int[] { 3, 3 });
+            randomarray.Add(1, new int[] { 10000, 20000, 20000, 10000 });
+            randomarray.Add(2, new int[] { 30000, 10000, 20000 });
+            randomarray.Add(3, new int[] { 10000, 30000, 20000 });
+            randomarray.Add(4, new int[] { 20000, 40000 });
+            randomarray.Add(5, new int[] { 30000, 10000, 20000 });
+            randomarray.Add(6, new int[] { 10000, 30000, 10000, 10000 });
+            randomarray.Add(7, new int[] { 10000, 10000, 30000, 10000 });
+            randomarray.Add(8, new int[] { 20000, 20000, 20000 });
+            randomarray.Add(9, new int[] { 10000, 20000, 30000 });
+            randomarray.Add(10, new int[] { 30000, 30000 });
 
             int[][] parede = new int[6200][];
 
@@ -133,6 +133,54 @@ namespace ParedeAPI.Servico
             result = total.Values.Min();
 
             return result;
+        }
+
+        /*
+         * contar quantas vezes eu fui até certo ponto e quantificar, 
+         * no exemplo do enunciado, contando os tijolos, quantidas vezes eu cheguei até a certa posição
+         * 1-1+1+1
+         * 3-1+1+1
+         * 5-1+1
+         * 4-1+1+1+1
+         * 2-1
+         */
+        public int MenorNumTijolosCortados(int[][] parede) // O(n*m) + O(n) = O(2n*m) = O(n*m)
+        {
+            Dictionary<int, int> contaTamnhoArestaTijolos = new Dictionary<int, int>();
+
+            // O(n) * (O(m) + O(1)) = O(n*m)
+            for (int linha = 0; linha < parede.Length; linha++) // O(n)
+            {
+                int posicao = 0;
+                for (int tijolo = 0; tijolo < parede[linha].Length - 1; tijolo++)  // O(m)
+                {
+                    posicao += parede[linha][tijolo];
+
+                    if (contaTamnhoArestaTijolos.ContainsKey(posicao)) // O(1)
+                    {
+                        contaTamnhoArestaTijolos[posicao]++;  //adiciona qual posição passou novamente
+                    }
+                    else
+                    {
+                        /*cria o tamanho do tijolo, 
+                         * exemplo: passando 1x no tijolo, cria o tamanho de tijolo 1, 
+                         * passando no tamanho 1+2=3 do tijolo, cria o tamanho 3 tijolo, 
+                         * que é a posição. 
+                         */
+                        contaTamnhoArestaTijolos[posicao] = 1;
+                    }
+                }
+            }
+            int maxTijolosCortados = 0;
+            int menor = 0;
+            if (contaTamnhoArestaTijolos.Values.Count() > 0)
+                maxTijolosCortados = contaTamnhoArestaTijolos.Values.Max(); // O(n)
+
+            int altura = parede.GetLength(0);
+            if (maxTijolosCortados < altura)
+                menor = altura - maxTijolosCortados;
+
+            return menor;
         }
     }
 }
