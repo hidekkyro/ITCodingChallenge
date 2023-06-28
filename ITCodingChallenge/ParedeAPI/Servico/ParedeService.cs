@@ -1,11 +1,9 @@
-﻿namespace ParedeAPI.Servico
+﻿using ParedeAPI.Contrato.Servico;
+
+namespace ParedeAPI.Servico
 {
-    public class ParedeService
+    public class ParedeService : IParedeService
     {
-        public ParedeService()
-        {
-            
-        }
 
         public int[][] GerarParedeExemplo()
         {
@@ -99,8 +97,9 @@
             if (contaTamnhoArestaTijolos.Values.Count() > 0)
                 maxTijolosCortados = contaTamnhoArestaTijolos.Values.Max(); // O(n)
 
-            if (maxTijolosCortados < 0)
-                menor = parede.GetLength(0) - maxTijolosCortados;
+            int altura = parede.GetLength(0);
+            if (maxTijolosCortados < altura)
+                menor = altura - maxTijolosCortados;
 
             return menor;
         }
