@@ -32,3 +32,70 @@ Output: 2
   - O número de tijolos em cada linha está em um range de [1,10.000]. A altura da parede está em um range de [1, 10.000]. O número total de tijolos não excederá 20.000.
 
 - Os entregáveis consistem no código fonte em uma linguagem de programação a seu critério e uma análise da complexidade assintótica (big-O notation) do tempo de execução da sua solução
+
+
+
+# Resolução
+
+Verifica a quantidade de tamanho dos blocos de uma amostra, no caso a primeira linha, desta forma, começo a verificar cada possível corte, linha e coluna, um a um.
+
+Percorre a linha até a posição do possível corte. 
+    
+- Caso a somatório dos tijolos resulte na posição do possível corte, então o corte será na emenda, não cortando o tijolo; 
+
+- Caso a somatório dos tijolos resulte maior do que a posição do possível corte, então há corte no tijolo, desta maneira é adicionado em um dicionario a posição e a quantidade de blocos cortado para aquela posição.
+
+Após o termino de categorizar os cortes de tijolos por posição, é recuperado o menor valor do dicionário, com o objetivo de retornar o menor números de cortes.
+
+
+```C#
+public int ContaParede(int[][] parede)
+ {
+     int soma = 0;
+     int alvo = 0;
+     int totalBlocks;
+     int result;
+     Dictionary<int, int> total = new Dictionary<int, int>();
+
+     alvo = parede[0].Sum(); // O(n)
+
+     #region O(N^3)
+     for (int posicao = 1; posicao < alvo; posicao++) // O(n)
+     {
+         totalBlocks = 0;
+         for (int linha = 0; linha < parede.Length; linha++) // O(n)
+         {
+             for (int coluna = 0; coluna < parede[linha].Length; coluna++) // O(n)
+             {
+                 int valor = parede[linha][coluna];
+                 soma += valor;
+                 if (posicao == soma)
+                 {
+                     break;
+                 }
+                 else if (posicao < soma)
+                 {
+                     totalBlocks++;
+                     break;
+                 }
+             }
+             soma = 0;
+         }
+         total.Add(posicao, totalBlocks);
+
+     }
+     #endregion O(N^3)
+
+     result = total.Values.Min();
+
+     return result;
+ }
+```
+
+
+
+# Complexidade
+
+Conforme mostra o código acima, temos uma complexidade O(n^3) em big-O notation.
+
+
