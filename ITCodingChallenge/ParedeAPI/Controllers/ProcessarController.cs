@@ -31,12 +31,10 @@ namespace ParedeAPI.Controllers
                 if (!_paredeService.IsParede(parede))
                     return BadRequest("Parede fora do padrão, preenche uma parede de uma altura de 1 até 10.000, e uma largura de 1 até 10.000, que contenha no maximo 20.000 tijolos.");
 
-            int menorCorte = _paredeService.MenorNumTijolosCortados(parede);
-            int menor2corte = _paredeService.ContaParede(parede);
+            int menorCorte = _paredeService.ContaParede(parede);
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("MenorCorte", menorCorte);
-            result.Add("Menor2Corte", menor2corte);
 
             if(usarParedeExemplo)
                 result.Add("ParedeExemplo", parede);
