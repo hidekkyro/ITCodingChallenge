@@ -32,7 +32,7 @@ namespace ParedeAPI.Controllers
                 if (!_paredeService.IsParede(parede))
                     return BadRequest("Parede fora do padrão, preenche uma parede de uma altura de 1 até 10.000, e uma largura de 1 até 10.000, que contenha no maximo 20.000 tijolos.");
 
-           int menorCorte = _paredeService.ContaParede(parede);
+           int menorCorte = _paredeService.MenorNumTijolosCortados(parede);
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("menorParedeGrande", menorCorte);
@@ -61,17 +61,11 @@ namespace ParedeAPI.Controllers
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
-            int menorParedeGrande = _paredeService.ContaParede(paredeGrande);
+            int menorParedeGrande = _paredeService.MenorNumTijolosCortados(paredeGrande);
             TimeSpan tempoParedeGrande = timer.Elapsed;
             timer.Restart();
-            int menorCorteExemplo = _paredeService.ContaParede(paredeExemplo);
+            int menorCorteExemplo = _paredeService.MenorNumTijolosCortados(paredeExemplo);
             TimeSpan tempoParedeExemplo = timer.Elapsed;
-            timer.Restart();
-            int menorCorteExemplo2 = _paredeService.MenorNumTijolosCortados(paredeGrande);
-            TimeSpan tempoParedeExemplo2 = timer.Elapsed;
-            timer.Restart();
-            int menorCorteExemplo3 = _paredeService.MenorNumTijolosCortados(paredeExemplo);
-            TimeSpan tempoParedeExemplo3 = timer.Elapsed;
             timer.Stop();
 
             int qtd = 0;
@@ -107,13 +101,6 @@ namespace ParedeAPI.Controllers
             result.Add("tempoParedeExemplo", tempoParedeExemplo);
             result.Add("paredeExempl", paredeExempl);
 
-            result.Add("menorCorteExemplo2", menorCorteExemplo2);
-            result.Add("tempoParedeExemplo2", tempoParedeExemplo2);
-            result.Add("paredeExempl2", paredeGrand);
-
-            result.Add("menorCorteExemplo3", menorCorteExemplo3);
-            result.Add("tempoParedeExemplo3", tempoParedeExemplo3);
-            result.Add("paredeExempl3", paredeExempl);
 
             //if(usarParedeExemplo)
             //    result.Add("ParedeExemplo", parede);

@@ -93,48 +93,6 @@ namespace ParedeAPI.Servico
             return true;
         }
 
-        public int ContaParede(int[][] parede)
-        {
-            int soma = 0;
-            int alvo = 0;
-            int totalBlocks;
-            int result;
-            Dictionary<int, int> total = new Dictionary<int, int>();
-
-            alvo = parede[0].Sum(); // O(n)
-
-            #region O(N^3)
-            for (int posicao = 1; posicao < alvo; posicao++) // O(n)
-            {
-                totalBlocks = 0;
-                for (int linha = 0; linha < parede.Length; linha++) // O(n)
-                {
-                    for (int coluna = 0; coluna < parede[linha].Length; coluna++) // O(n)
-                    {
-                        int valor = parede[linha][coluna];
-                        soma += valor;
-                        if (posicao == soma)
-                        {
-                            break;
-                        }
-                        else if (posicao < soma)
-                        {
-                            totalBlocks++;
-                            break;
-                        }
-                    }
-                    soma = 0;
-                }
-                total.Add(posicao, totalBlocks);
-
-            }
-            #endregion O(N^3)
-
-            result = total.Values.Min();
-
-            return result;
-        }
-
         /*
          * contar quantas vezes eu fui até certo ponto e quantificar, 
          * no exemplo do enunciado, contando os tijolos, quantidas vezes eu cheguei até a certa posição
